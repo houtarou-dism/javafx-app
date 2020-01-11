@@ -25,14 +25,17 @@ import java.util.Random;
 
 public class reports extends Application
 {
+	int a = 0, b = 0, arithmetic_ope = 0;
+	int ans = 0;
 	
 	private Canvas cv;
 	private Color clr;
-	private boolean flag = false;
+	private boolean flags;
+	private String judgment = "default";			//正解、不正解判定 初期値；０，正解：１，不正解：２;
 	
 	/**********top-label**********/
 	Label lb_top_left_ans = new Label("xss");
-	Label lb_top_right_rem = new Label("10");
+	Label lb_top_right_rem = new Label("60");
 	/**********top-label end**********/
 	
 	/**********problem-label**********/
@@ -84,6 +87,7 @@ public class reports extends Application
 		
 		cv = new Canvas(600,30);
 		clr = Color.BLACK;
+		judgment = "initial";
 		drawCanvas();
 		
 		HBox hb_rbs = new HBox();
@@ -145,7 +149,7 @@ public class reports extends Application
 		text.setMaxWidth(380);
 		text.setMinHeight(30);
 		text.setFont(new Font(15));
-		text.setAlignment(Pos.TOP_RIGHT);
+		text.setAlignment(Pos.CENTER);
 		text.setPromptText("キーボードから入力する場合はこちらから");
 		
 		VBox vb_text = new VBox();
@@ -252,7 +256,23 @@ public class reports extends Application
 		stage.show();
 }
 
+	/******************************isnumber******************************/
+	public void isNumber(String s)
+	{
+		flags = true;
+		
+	    try
+		{
+			Integer.parseInt(s);
+			
+	     }catch (NumberFormatException e) {
+		 	
+			flags = false;
+	     }
+	}
+	/******************************isnumber end******************************/
 
+	
 	/******************************canvas******************************/
 	private void drawCanvas(){
 		
@@ -260,87 +280,31 @@ public class reports extends Application
 		
 		gc.setFill(clr);
 		gc.setFont(new Font(30));
-		gc.fillText("＼(^o^)／ 正解 ＼(^o^)／", 93, 25);
+		
+		if(judgment == "correct"){
+			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
+			gc.fillText("＼(^o^)／ 正解 ＼(^o^)／", 93, 25);					//正解
+		}
+		else if(judgment == "incorrect"){
+			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
+			gc.fillText("(´・ω・｀) 不正解 (´・ω・｀)", 93, 25);		//不正解
+		}
+		else if(judgment == "fraud"){
+			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
+			gc.fillText("適切な値を入力してください", 93, 25);		//エラー表示
+		}
+		else if(judgment == "initial"){
+			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
+			gc.fillText("ここに回答結果がでます", 93, 25);		//初期
+		}
+		else{
+			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
+			gc.fillText("", 93, 25);		//デフォルト
+		}
+		
 	}
 	/******************************canvas end******************************/
 	
-	
-	/******************************problem******************************/
-	public void problem(){
-		lb_problem.setText("xss");
-	
-	}
-	/******************************problem end******************************/
-	
-	
-	/******************************enter btn******************************/
-	private class EventHandler_btn implements EventHandler<ActionEvent>
-	{
-		public void handle(ActionEvent e)
-		{
-			Button bt = (Button)e.getTarget();
-			
-			for(int i=0;i<10;i++){
-				if(bt.getId().equals(String.valueOf(i))) System.out.println(String.valueOf(i));
-			}
-			
-			if(bt.getId().equals("10")) {
-				
-				Random rand = new Random();
-				
-				int a = rand.nextInt(100);
-				int b = rand.nextInt(100);
-				
-				int arithmetic_ope = rand.nextInt(2);
-				
-				
-				if(arithmetic_ope == 0) lb_problem.setText(a + " + " + b);
-				else lb_problem.setText(a + " - " + b);
-			}
-		}
-	}
-	/******************************enter btn end******************************/
-	
-	
-	/******************************start btn event******************************/
-	
-	private class EventHandler_start_btn implements EventHandler<ActionEvent>
-	{
-		public void handle(ActionEvent e)
-		{
-			
-			btn[10].setDisable(false);
-			
-			Timeline timer = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
-	        @Override
-	        public void handle(ActionEvent event) {
-				
-	        		lb_top_right_rem.setText(String.valueOf(Integer.parseInt(lb_top_right_rem.getText()) - 1));
-					
-					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 30){			//start btnの無効化
-						
-						btn_bottom_left.setDisable(true);
-						btn_bottom_right.setDisable(true);
-					}
-					
-					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled key-btnの無効化
-						
-						text.setDisable(true);
-						
-						for(int i=0;i<11;i++){
-							btn[i].setDisable(true);
-						}
-					}
-	            }
-	        }));
-			
-			timer.setCycleCount(10);
-	    	timer.play();
-			
-		}
-	}
-	
-	/******************************start btn event end******************************/
 	
 	/******************************radio_button******************************/
 	private class radio_button implements EventHandler<ActionEvent>
@@ -358,7 +322,121 @@ public class reports extends Application
 		}
 	}
 	/******************************radio_button end******************************/
-
+	
+	
+	/******************************calculation******************************/
+	public void calculation(){
+		
+		Random rand = new Random();
+				
+		a = rand.nextInt(100);
+		b = rand.nextInt(100);
+		
+		arithmetic_ope = rand.nextInt(2);
+				
+		if(arithmetic_ope == 0){
+			lb_problem.setText(a + " + " + b);
+			ans = a + b;
+		}
+		else{
+			lb_problem.setText(a + " - " + b);
+			ans = a - b;
+		}
+		
+	}
+	/******************************calculation end******************************/
+	
+	
+	/******************************enter btn******************************/
+	private class EventHandler_btn implements EventHandler<ActionEvent>
+	{
+		String instr = "";
+		int num = 0;
+		
+		public void handle(ActionEvent e)
+		{
+			Button bt = (Button)e.getTarget();
+			
+			judgment = "default";
+			drawCanvas();
+						
+			for(int i=0;i<10;i++){
+				if(bt.getId().equals(String.valueOf(i))) instr += String.valueOf(i);
+			}
+			
+			isNumber(instr);
+			
+			if(flags){
+				
+				text.setText(instr);
+			
+				if(bt.getId().equals("10")) {
+					
+					num = Integer.parseInt(instr);
+					
+					if(num == ans){
+						judgment = "correct";
+						drawCanvas();
+					}
+					else{
+						judgment = "incorrect";
+						drawCanvas();
+					}
+					
+					calculation();
+					instr = "";
+					text.setText(instr);
+				}
+			}else{
+				judgment = "fraud";
+				drawCanvas();
+			}
+		}
+	}
+	/******************************enter btn end******************************/
+	
+	
+	/******************************timer start btn event******************************/
+	
+	private class EventHandler_start_btn implements EventHandler<ActionEvent>
+	{
+		public void handle(ActionEvent e)
+		{
+			
+			btn[10].setDisable(false);
+			calculation();
+			
+			Timeline timer = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
+	        @Override
+	        public void handle(ActionEvent event) {
+				
+	        		lb_top_right_rem.setText(String.valueOf(Integer.parseInt(lb_top_right_rem.getText()) - 1));
+					
+					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 60){			//start btnの無効化
+						
+						btn_bottom_left.setDisable(true);
+						btn_bottom_right.setDisable(true);
+					}
+					
+					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled key-btnの無効化
+						
+						text.setDisable(true);
+						
+						for(int i=0;i<11;i++){
+							btn[i].setDisable(true);
+						}
+					}
+	            }
+	        }));
+			
+			timer.setCycleCount(60);
+	    	timer.play();
+			
+		}
+	}
+	
+	/******************************timer start btn event end******************************/
+	
 	public static void main(String[] args)
 	{
 		launch(args);
