@@ -31,7 +31,7 @@ public class reports extends Application
 	private Canvas cv;
 	private Color clr;
 	private boolean flags;
-	private String judgment = "default";			//正解、不正解判定 初期値；０，正解：１，不正解：２;
+	private String judgment = "default";			//正解、不正解判定 初期値；initial，正解：correct，不正解：incorrect, エラー：fraud;
 	
 	/**********top-label**********/
 	Label lb_top_left_ans = new Label("xss");
@@ -43,8 +43,10 @@ public class reports extends Application
 	/**********problem-label end**********/
 	
 	/**********start btn**********/
-	Button btn_bottom_left = new Button("s\nt\na\nr\nt");
-	Button btn_bottom_right = new Button("s\nt\na\nr\nt");
+	Button btn_left_top = new Button("t\nr\ny");
+	Button btn_left_bottom = new Button("r\ne\nt\nr\ny");
+	Button btn_right_top = new Button("C");
+	Button btn_right_bottom = new Button("ー");
 	/**********start btn end**********/
 	
 	/**********key button gridpane**********/
@@ -171,7 +173,7 @@ public class reports extends Application
 			btn[i].setPrefSize(80, 80);
 		}
 		
-		btn[10] = new Button("enter!!!");
+		btn[10] = new Button("enter！");
 		btn[10].setFont(new Font(30));
 		btn[10].setPrefSize(160, 80);
 		btn[10].setDisable(true);
@@ -195,25 +197,38 @@ public class reports extends Application
 			btn[i].addEventHandler(ActionEvent.ANY, actionhandler_btn);
 		}
 		
-		/******************************start btn******************************/
+		/******************************left rightt btn******************************/
 		
-		btn_bottom_left.setFont(new Font(30));
-		btn_bottom_right.setFont(new Font(30));
-		btn_bottom_left.setPrefSize(70, 329);
-		btn_bottom_right.setPrefSize(70, 329);
-		
+		btn_left_top.setFont(new Font(25));
+		btn_left_bottom.setFont(new Font(25));
+		btn_right_top.setFont(new Font(25));
+		btn_right_bottom.setFont(new Font(25));
+		btn_left_top.setPrefSize(70, 164);
+		btn_left_bottom.setPrefSize(70, 164);
+		btn_right_top.setPrefSize(70, 164);
+		btn_right_bottom.setPrefSize(70, 164);
 		
 		VBox vb_btn_left = new VBox();
 		VBox vb_btn_right = new VBox();
-		vb_btn_left.getChildren().add(btn_bottom_left);
-		vb_btn_right.getChildren().add(btn_bottom_right);
+		vb_btn_left.getChildren().add(btn_left_top);
+		vb_btn_left.getChildren().add(btn_left_bottom);
+		vb_btn_right.getChildren().add(btn_right_top);
+		vb_btn_right.getChildren().add(btn_right_bottom);
 		
+		vb_btn_left.setSpacing(3);
+		vb_btn_right.setSpacing(3);
 		
+		btn_left_bottom.setId("11");
+		btn_right_top.setId("12");
+		btn_right_bottom.setId("13");
+		btn_left_bottom.addEventHandler(ActionEvent.ANY, actionhandler_btn);
+		btn_right_top.addEventHandler(ActionEvent.ANY, actionhandler_btn);
+		btn_right_bottom.addEventHandler(ActionEvent.ANY, actionhandler_btn);
+			
 		EventHandler_start_btn actionhandler_start_btn = new EventHandler_start_btn();
-		vb_btn_left.addEventHandler(ActionEvent.ANY, actionhandler_start_btn);
-		vb_btn_right.addEventHandler(ActionEvent.ANY, actionhandler_start_btn);
+		btn_left_top.addEventHandler(ActionEvent.ANY, actionhandler_start_btn);
 		
-		/******************************start btn end******************************/
+		/******************************left right btn end******************************/
 		
 		bp.setCenter(gp);
 		bp.setLeft(vb_btn_left);
@@ -251,7 +266,7 @@ public class reports extends Application
 		stage.setScene(scene);
 		stage.setTitle("二則演算ゲーム");
 		stage.setWidth(550);
-		stage.setHeight(650);
+		stage.setHeight(670);
 		
 		stage.show();
 }
@@ -291,7 +306,7 @@ public class reports extends Application
 		}
 		else if(judgment == "fraud"){
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
-			gc.fillText("適切な値を入力してください", 93, 25);		//エラー表示
+			gc.fillText("", 93, 25);		//エラー表示
 		}
 		else if(judgment == "initial"){
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
@@ -364,13 +379,20 @@ public class reports extends Application
 				if(bt.getId().equals(String.valueOf(i))) instr += String.valueOf(i);
 			}
 			
+			if(bt.getId().equals("12")){
+				instr = "";
+				text.setText(instr);
+			}else if((instr.length() == 0) && bt.getId().equals("13")){
+				instr += "-";
+			}
+			
 			isNumber(instr);
 			
 			if(flags){
 				
 				text.setText(instr);
-			
-				if(bt.getId().equals("10")) {
+				
+				if(bt.getId().equals("10")){
 					
 					num = Integer.parseInt(instr);
 					
@@ -414,8 +436,8 @@ public class reports extends Application
 					
 					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 60){			//start btnの無効化
 						
-						btn_bottom_left.setDisable(true);
-						btn_bottom_right.setDisable(true);
+						btn_left_top.setDisable(true);
+						btn_left_bottom.setDisable(true);
 					}
 					
 					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled key-btnの無効化
