@@ -25,6 +25,7 @@ import java.util.Random;
 
 public class reports extends Application
 {
+	
 	int a = 0, b = 0, arithmetic_ope = 0;
 	int ans = 0;
 	
@@ -54,11 +55,35 @@ public class reports extends Application
 	
 	/**********textfile**********/
 	TextField text = new TextField();
-	/**********textfile end**********/
 	String instr = "";
+	/**********textfile end**********/
+	
 	
 	public void start(Stage stage) throws Exception
 	{
+		
+		/******************************メニューバー******************************/
+		MenuBar menu_bar = new MenuBar();
+		Menu menu = new Menu("設定");
+		
+		MenuItem mi1 = new MenuItem("キーボード入力を有効化する");
+		MenuItem mi2 = new MenuItem("ボタン入力を有効化する");
+		mi1.setId("key");
+		mi2.setId("btn");
+		
+		menu_bar.getMenus().add(menu);
+		menu.getItems().add(mi1);
+		menu.getItems().add(mi2);
+		
+		HBox hb_menu = new HBox();
+		hb_menu.getChildren().addAll(menu_bar);
+		
+		hb_menu.setPadding(new Insets(0, 190, 0, 0));
+		hb_menu.setAlignment(Pos.CENTER);
+		
+		menu_bar.getStyleClass().add("menu_bar");
+		/******************************メニューバー end******************************/
+		
 		
 		/******************************ラジオボタン＆キャンバス******************************/
 		RadioButton[] rbs = new RadioButton[5];
@@ -97,7 +122,12 @@ public class reports extends Application
 		hb_rbs.setPadding(new Insets(10));
 		hb_rbs.setSpacing(10);
 		
-		hb_rbs.getStyleClass().add("hb_rbs");
+		HBox hb_top_menu = new HBox();
+		hb_top_menu.getChildren().addAll(hb_menu);
+		hb_top_menu.getChildren().addAll(hb_rbs);
+		
+		
+		hb_top_menu.getStyleClass().add("hb_top_menu");
 		
 		/******************************ラジオボタン＆キャンバス end******************************/
 		
@@ -197,6 +227,8 @@ public class reports extends Application
 			btn[i].addEventHandler(ActionEvent.ANY, actionhandler_btn);
 		}
 		
+		text.addEventHandler(ActionEvent.ANY, actionhandler_btn);			//textfieldイベント追加
+		
 		/******************************left rightt btn******************************/
 		
 		btn_left.setFont(new Font(25));
@@ -216,6 +248,7 @@ public class reports extends Application
 		
 		btn_right_top.setId("12");
 		btn_right_bottom.setId("13");
+		
 		btn_right_top.addEventHandler(ActionEvent.ANY, actionhandler_btn);
 		btn_right_bottom.addEventHandler(ActionEvent.ANY, actionhandler_btn);
 			
@@ -244,7 +277,7 @@ public class reports extends Application
 				
 		
 		VBox vb = new VBox();
-		vb.getChildren().add(hb_rbs);
+		vb.getChildren().add(hb_top_menu);
 		vb.getChildren().add(hb_top);
 		vb.getChildren().add(lb_problem);
 		vb.getChildren().add(cv);
@@ -378,6 +411,7 @@ public class reports extends Application
 			}else if((instr.length() == 0) && bt.getId().equals("13")){
 				instr += "-";
 			}
+			
 			
 			isNumber(instr);
 			
