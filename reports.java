@@ -43,8 +43,7 @@ public class reports extends Application
 	/**********problem-label end**********/
 	
 	/**********start btn**********/
-	Button btn_left_top = new Button("t\nr\ny");
-	Button btn_left_bottom = new Button("r\ne\nt\nr\ny");
+	Button btn_left = new Button("s\nt\na\nr\nt");
 	Button btn_right_top = new Button("C");
 	Button btn_right_bottom = new Button("Å[");
 	/**********start btn end**********/
@@ -56,6 +55,7 @@ public class reports extends Application
 	/**********textfile**********/
 	TextField text = new TextField();
 	/**********textfile end**********/
+	String instr = "";
 	
 	public void start(Stage stage) throws Exception
 	{
@@ -199,34 +199,28 @@ public class reports extends Application
 		
 		/******************************left rightt btn******************************/
 		
-		btn_left_top.setFont(new Font(25));
-		btn_left_bottom.setFont(new Font(25));
+		btn_left.setFont(new Font(25));
 		btn_right_top.setFont(new Font(25));
 		btn_right_bottom.setFont(new Font(25));
-		btn_left_top.setPrefSize(70, 164);
-		btn_left_bottom.setPrefSize(70, 164);
+		btn_left.setPrefSize(70, 329);
 		btn_right_top.setPrefSize(70, 164);
 		btn_right_bottom.setPrefSize(70, 164);
 		
 		VBox vb_btn_left = new VBox();
 		VBox vb_btn_right = new VBox();
-		vb_btn_left.getChildren().add(btn_left_top);
-		vb_btn_left.getChildren().add(btn_left_bottom);
+		vb_btn_left.getChildren().add(btn_left);
 		vb_btn_right.getChildren().add(btn_right_top);
 		vb_btn_right.getChildren().add(btn_right_bottom);
 		
-		vb_btn_left.setSpacing(3);
 		vb_btn_right.setSpacing(3);
 		
-		btn_left_bottom.setId("11");
 		btn_right_top.setId("12");
 		btn_right_bottom.setId("13");
-		btn_left_bottom.addEventHandler(ActionEvent.ANY, actionhandler_btn);
 		btn_right_top.addEventHandler(ActionEvent.ANY, actionhandler_btn);
 		btn_right_bottom.addEventHandler(ActionEvent.ANY, actionhandler_btn);
 			
 		EventHandler_start_btn actionhandler_start_btn = new EventHandler_start_btn();
-		btn_left_top.addEventHandler(ActionEvent.ANY, actionhandler_start_btn);
+		btn_left.addEventHandler(ActionEvent.ANY, actionhandler_start_btn);
 		
 		/******************************left right btn end******************************/
 		
@@ -365,7 +359,6 @@ public class reports extends Application
 	/******************************enter btn******************************/
 	private class EventHandler_btn implements EventHandler<ActionEvent>
 	{
-		String instr = "";
 		int num = 0;
 		
 		public void handle(ActionEvent e)
@@ -425,9 +418,20 @@ public class reports extends Application
 		public void handle(ActionEvent e)
 		{
 			
-			btn[10].setDisable(false);
 			calculation();
 			
+			instr = "";
+			text.setText(instr);
+			
+			btn[10].setDisable(false);
+			text.setDisable(false);
+			btn_right_top.setDisable(false);
+			btn_right_bottom.setDisable(false);
+			
+			for(int i=0;i<11;i++){
+				btn[i].setDisable(false);
+			}
+						
 			Timeline timer = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>(){
 	        @Override
 	        public void handle(ActionEvent event) {
@@ -436,17 +440,24 @@ public class reports extends Application
 					
 					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 60){			//start btnÇÃñ≥å¯âª
 						
-						btn_left_top.setDisable(true);
-						btn_left_bottom.setDisable(true);
+						btn_left.setDisable(true);
 					}
 					
-					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled key-btnÇÃñ≥å¯âª
+					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled clear minus key-btnÇÃñ≥å¯âª
 						
 						text.setDisable(true);
+						btn_right_top.setDisable(true);
+						btn_right_bottom.setDisable(true);
 						
 						for(int i=0;i<11;i++){
 							btn[i].setDisable(true);
 						}
+					}
+					
+					if((Integer.parseInt(lb_top_right_rem.getText())) == 0){			//start btnÇÃóLå¯âª
+						
+						btn_left.setDisable(false);
+						lb_top_right_rem.setText("60");
 					}
 	            }
 	        }));
