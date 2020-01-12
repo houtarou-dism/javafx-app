@@ -6,6 +6,10 @@
 	-fx-background-color: #ffb329;
 }
 
-.menu_bar {
-	-fx-background-color: #ffb329;
+.menu-bar {
+    -fx-background-color: linear-gradient(#ffb329 0%, #ffb329 100%);    
+    -fx-selection-bar: #ffa500 ;
+    -fx-text-background-color: lightgrey ;
+    -fx-focused-text-base-color: white ;
 }
+

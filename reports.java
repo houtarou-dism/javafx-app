@@ -32,7 +32,13 @@ public class reports extends Application
 	private Canvas cv;
 	private Color clr;
 	private boolean flags;
+	private boolean menu_flag = false;
 	private String judgment = "default";			//正解、不正解判定 初期値；initial，正解：correct，不正解：incorrect, エラー：fraud;
+	
+	/**********menubar**********/
+	RadioMenuItem mi1 = new RadioMenuItem("キーボード入力を有効化する");
+	RadioMenuItem mi2 = new RadioMenuItem("ボタン入力を有効化する");
+	/**********menubar end**********/
 	
 	/**********top-label**********/
 	Label lb_top_left_ans = new Label("xss");
@@ -66,10 +72,9 @@ public class reports extends Application
 		MenuBar menu_bar = new MenuBar();
 		Menu menu = new Menu("設定");
 		
-		MenuItem mi1 = new MenuItem("キーボード入力を有効化する");
-		MenuItem mi2 = new MenuItem("ボタン入力を有効化する");
-		mi1.setId("key");
-		mi2.setId("btn");
+		ToggleGroup tog = new ToggleGroup();
+		mi1.setToggleGroup(tog);
+		mi2.setToggleGroup(tog);
 		
 		menu_bar.getMenus().add(menu);
 		menu.getItems().add(mi1);
