@@ -28,7 +28,7 @@ public class reports extends Application
 	
 	int a = 0, b = 0, arithmetic_ope = 0;
 	int ans = 0;
-	int count = 0, sum_count = 0;
+	int count = 0, sum_count = 0, sum = 0;
 	int time = 0;
 	
 	private Canvas cv;
@@ -364,7 +364,7 @@ public class reports extends Application
 		}
 		else if(judgment == "initial"){
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
-			gc.fillText("‚±‚±‚É‰ñ“šŒ‹‰Ê‚ª‚Å‚Ü‚·", 93, 25);		//‰Šú
+			gc.fillText("‚±‚±‚É‰ñ“šŒ‹‰Ê‚ª‚Å‚Ü‚·", 130, 25);		//‰Šú
 		}
 		else{
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
@@ -514,7 +514,6 @@ public class reports extends Application
 			text.setText(instr);
 			
 			btn[10].setDisable(false);
-			text.setDisable(false);
 			btn_right_top.setDisable(false);
 			btn_right_bottom.setDisable(false);
 			
@@ -541,9 +540,8 @@ public class reports extends Application
 					
 					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled clear minus key-btn‚Ì–³Œø‰»
 						
-						lb_problem.setText(count +  "–â ³‰ğI");
-						
-						text.setDisable(true);
+						sum = count;
+						lb_problem.setText(sum +  " –â ³‰ğI");
 						btn_right_top.setDisable(true);
 						btn_right_bottom.setDisable(true);
 						
@@ -554,9 +552,14 @@ public class reports extends Application
 					
 					if((Integer.parseInt(lb_top_right_rem.getText())) == 0){			//start btn‚Ì—LŒø‰»
 						
+						time = 0;
+						count = 0; sum_count = 0;
 						menu.setDisable(false);
 						btn_left.setDisable(false);
-						lb_top_right_rem.setText("60");
+						lb_top_right_rem.setText("30");
+						mi1.setSelected(true);
+						judgment = "fraud";
+						drawCanvas();
 					}
 	            }
 	        }));
