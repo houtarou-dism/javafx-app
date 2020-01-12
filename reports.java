@@ -28,6 +28,8 @@ public class reports extends Application
 	
 	int a = 0, b = 0, arithmetic_ope = 0;
 	int ans = 0;
+	int count = 0, sum_count = 0;
+	int time = 0;
 	
 	private Canvas cv;
 	private Color clr;
@@ -36,13 +38,15 @@ public class reports extends Application
 	private String judgment = "default";			//正解、不正解判定 初期値；initial，正解：correct，不正解：incorrect, エラー：fraud;
 	
 	/**********menubar**********/
-	RadioMenuItem mi1 = new RadioMenuItem("キーボード入力を有効化する");
-	RadioMenuItem mi2 = new RadioMenuItem("ボタン入力を有効化する");
+	Menu menu = new Menu("時間設定");
+	RadioMenuItem mi1 = new RadioMenuItem("30秒");
+	RadioMenuItem mi2 = new RadioMenuItem("45秒");
+	RadioMenuItem mi3 = new RadioMenuItem("60秒");
 	/**********menubar end**********/
 	
 	/**********top-label**********/
-	Label lb_top_left_ans = new Label("xss");
-	Label lb_top_right_rem = new Label("60");
+	Label lb_top_left_ans = new Label("");
+	Label lb_top_right_rem = new Label("30");
 	/**********top-label end**********/
 	
 	/**********problem-label**********/
@@ -59,10 +63,10 @@ public class reports extends Application
 	Button[] btn = new Button[11];
 	/**********key button gridpane end**********/
 	
-	/**********textfile**********/
-	TextField text = new TextField();
+	/**********text**********/
+	Label text = new Label();
 	String instr = "";
-	/**********textfile end**********/
+	/**********text end**********/
 	
 	
 	public void start(Stage stage) throws Exception
@@ -70,23 +74,32 @@ public class reports extends Application
 		
 		/******************************メニューバー******************************/
 		MenuBar menu_bar = new MenuBar();
-		Menu menu = new Menu("設定");
+		
+		mi1.setId("30");
+		mi2.setId("45");
+		mi3.setId("60");
 		
 		ToggleGroup tog = new ToggleGroup();
 		mi1.setToggleGroup(tog);
 		mi2.setToggleGroup(tog);
+		mi3.setToggleGroup(tog);
 		
 		menu_bar.getMenus().add(menu);
 		menu.getItems().add(mi1);
 		menu.getItems().add(mi2);
+		menu.getItems().add(mi3);
 		
+		mi1.setSelected(true);
 		HBox hb_menu = new HBox();
 		hb_menu.getChildren().addAll(menu_bar);
 		
-		hb_menu.setPadding(new Insets(0, 190, 0, 0));
+		hb_menu.setPadding(new Insets(0, 165, 0, 0));
 		hb_menu.setAlignment(Pos.CENTER);
 		
 		menu_bar.getStyleClass().add("menu_bar");
+		
+		EventHandler_time_setting actionhandler_time_setting = new EventHandler_time_setting();
+		menu.addEventHandler(ActionEvent.ANY, actionhandler_time_setting);
 		/******************************メニューバー end******************************/
 		
 		
@@ -130,8 +143,7 @@ public class reports extends Application
 		HBox hb_top_menu = new HBox();
 		hb_top_menu.getChildren().addAll(hb_menu);
 		hb_top_menu.getChildren().addAll(hb_rbs);
-		
-		
+			
 		hb_top_menu.getStyleClass().add("hb_top_menu");
 		
 		/******************************ラジオボタン＆キャンバス end******************************/
@@ -153,10 +165,10 @@ public class reports extends Application
 		lb_top_right_q.setFont(new Font(25));
 		
 		lb_top_left.setPrefSize(70, 0);
-		lb_top_left_ans.setPrefSize(50, 80);
+		lb_top_left_ans.setPrefSize(80, 80);
 		lb_top_left_q.setPrefSize(170, 80);
 		lb_top_right.setPrefSize(70, 0);
-		lb_top_right_rem.setPrefSize(50, 80);
+		lb_top_right_rem.setPrefSize(80, 80);
 		lb_top_right_q.setPrefSize(30, 80);
 		
 		HBox hb_top = new HBox();
@@ -181,20 +193,21 @@ public class reports extends Application
 		/******************************problem-label end******************************/
 		
 		
-		/******************************textfile******************************/
+		/******************************text******************************/
 		
 		text.setMaxWidth(380);
-		text.setMinHeight(30);
-		text.setFont(new Font(15));
+		text.setMinHeight(35);
+		text.setFont(new Font(25));
 		text.setAlignment(Pos.CENTER);
-		text.setPromptText("キーボードから入力する場合はこちらから");
 		
 		VBox vb_text = new VBox();
 		vb_text.getChildren().add(text);
 		vb_text.setAlignment(Pos.CENTER);
 		vb_text.setPadding(new Insets(15, 0, 0, 0));
 		
-		/******************************textfile end******************************/
+		text.getStyleClass().add("text_back");
+		
+		/******************************text end******************************/
 		
 		
 		/******************************key button gridpane******************************/
@@ -308,17 +321,26 @@ public class reports extends Application
 	{
 		flags = true;
 		
-	    try
-		{
+	    try{
 			Integer.parseInt(s);
-			
 	     }catch (NumberFormatException e) {
-		 	
 			flags = false;
 	     }
 	}
 	/******************************isnumber end******************************/
-
+	
+	
+	/******************************isnumber******************************/
+	public void isLength(String s)
+	{
+		try{
+			Integer.parseInt(s);
+		}catch (Exception e){
+			instr = "100";
+		}
+	}
+	/******************************isnumber end******************************/
+	
 	
 	/******************************canvas******************************/
 	private void drawCanvas(){
@@ -394,6 +416,29 @@ public class reports extends Application
 	/******************************calculation end******************************/
 	
 	
+	/******************************time_setting******************************/
+	
+	private class EventHandler_time_setting implements EventHandler<ActionEvent>
+	{
+		public void handle(ActionEvent e)
+		{
+			if(mi1.isSelected()){
+				time = 0;
+				lb_top_right_rem.setText("30");
+			}
+			else if(mi2.isSelected()){
+				time = 1;
+				lb_top_right_rem.setText("45");
+			}
+			else if(mi3.isSelected()){
+				time = 2;
+				lb_top_right_rem.setText("60");
+			}
+		}
+	}
+	/******************************time_setting end******************************/
+	
+	
 	/******************************enter btn******************************/
 	private class EventHandler_btn implements EventHandler<ActionEvent>
 	{
@@ -417,7 +462,6 @@ public class reports extends Application
 				instr += "-";
 			}
 			
-			
 			isNumber(instr);
 			
 			if(flags){
@@ -426,11 +470,16 @@ public class reports extends Application
 				
 				if(bt.getId().equals("10")){
 					
+					sum_count++;
+					
+					isLength(instr);
+					
 					num = Integer.parseInt(instr);
 					
 					if(num == ans){
 						judgment = "correct";
 						drawCanvas();
+						count++;
 					}
 					else{
 						judgment = "incorrect";
@@ -440,6 +489,7 @@ public class reports extends Application
 					calculation();
 					instr = "";
 					text.setText(instr);
+					lb_top_left_ans.setText(count + " / " + sum_count);
 				}
 			}else{
 				judgment = "fraud";
@@ -458,6 +508,7 @@ public class reports extends Application
 		{
 			
 			calculation();
+			lb_top_left_ans.setText(count + " / " + sum_count);
 			
 			instr = "";
 			text.setText(instr);
@@ -477,12 +528,20 @@ public class reports extends Application
 				
 	        		lb_top_right_rem.setText(String.valueOf(Integer.parseInt(lb_top_right_rem.getText()) - 1));
 					
-					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 60){			//start btnの無効化
-						
+					if(time == 0 && ((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 30)){			//start btnの無効化
 						btn_left.setDisable(true);
+						menu.setDisable(true);
+					}else if(time == 1 && ((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 45)){			//start btnの無効化
+						btn_left.setDisable(true);
+						menu.setDisable(true);
+					}else if(time == 2 && ((Integer.parseInt(lb_top_right_rem.getText()) - 1) < 60)){			//start btnの無効化
+						btn_left.setDisable(true);
+						menu.setDisable(true);
 					}
 					
 					if((Integer.parseInt(lb_top_right_rem.getText()) - 1) <= -1){			//textfiled clear minus key-btnの無効化
+						
+						lb_problem.setText(count +  "問 正解！");
 						
 						text.setDisable(true);
 						btn_right_top.setDisable(true);
@@ -495,13 +554,16 @@ public class reports extends Application
 					
 					if((Integer.parseInt(lb_top_right_rem.getText())) == 0){			//start btnの有効化
 						
+						menu.setDisable(false);
 						btn_left.setDisable(false);
 						lb_top_right_rem.setText("60");
 					}
 	            }
 	        }));
 			
-			timer.setCycleCount(60);
+			if(time == 0) timer.setCycleCount(30);
+			else if(time == 1) timer.setCycleCount(45);
+			else if(time == 2) timer.setCycleCount(60);
 	    	timer.play();
 			
 		}

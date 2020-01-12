@@ -13,3 +13,6 @@
     -fx-focused-text-base-color: white ;
 }
 
+.text_back {
+    -fx-background-color: #ffd58a;
+}
