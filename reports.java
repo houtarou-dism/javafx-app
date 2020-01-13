@@ -3,21 +3,14 @@ import javafx.scene.*;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.scene.paint.*;
-import javafx.scene.image.*;
-import javafx.scene.effect.*;
 import javafx.scene.text.*;
 import javafx.scene.input.*;
 import javafx.scene.canvas.*;
-import javafx.scene.shape.*;
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.geometry.*;
-import javafx.collections.*;
-import javax.swing.*;
-import java.awt.BorderLayout;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.util.Duration;
 import java.util.Random;
 
@@ -26,10 +19,10 @@ import java.util.Random;
 public class reports extends Application
 {
 	
-	int a = 0, b = 0, arithmetic_ope = 0;
-	int ans = 0;
-	int count = 0, sum_count = 0, sum = 0;
-	int time = 0;
+	private int a = 0, b = 0, arithmetic_ope = 0;
+	private int ans = 0;
+	private int count = 0, sum_count = 0, sum = 0;
+	private int time = 0;
 	
 	private Canvas cv;
 	private Color clr;
@@ -93,7 +86,7 @@ public class reports extends Application
 		HBox hb_menu = new HBox();
 		hb_menu.getChildren().addAll(menu_bar);
 		
-		hb_menu.setPadding(new Insets(0, 165, 0, 0));
+		hb_menu.setPadding(new Insets(0, 60, 0, 0));
 		hb_menu.setAlignment(Pos.CENTER);
 		
 		menu_bar.getStyleClass().add("menu_bar");
@@ -104,17 +97,21 @@ public class reports extends Application
 		
 		
 		/******************************ラジオボタン＆キャンバス******************************/
-		RadioButton[] rbs = new RadioButton[5];
-		rbs[0] = new RadioButton("赤色");
-		rbs[1] = new RadioButton("橙色");
-		rbs[2] = new RadioButton("青色");
-		rbs[3] = new RadioButton("黄色");
-		rbs[4] = new RadioButton("緑色");
-		rbs[0].setId("red");
-		rbs[1].setId("orange");
-		rbs[2].setId("blue");
-		rbs[3].setId("yellow");
-		rbs[4].setId("green");
+		RadioButton[] rbs = new RadioButton[7];
+		rbs[0] = new RadioButton("白色");
+		rbs[1] = new RadioButton("黒色");
+		rbs[2] = new RadioButton("赤色");
+		rbs[3] = new RadioButton("橙色");
+		rbs[4] = new RadioButton("青色");
+		rbs[5] = new RadioButton("黄色");
+		rbs[6] = new RadioButton("緑色");
+		rbs[0].setId("white");
+		rbs[1].setId("black");
+		rbs[2].setId("red");
+		rbs[3].setId("orange");
+		rbs[4].setId("blue");
+		rbs[5].setId("yellow");
+		rbs[6].setId("green");
 		
 		ToggleGroup tg = new ToggleGroup();
 		rbs[0].setToggleGroup(tg);
@@ -122,6 +119,8 @@ public class reports extends Application
 		rbs[2].setToggleGroup(tg);
 		rbs[3].setToggleGroup(tg);
 		rbs[4].setToggleGroup(tg);
+		rbs[5].setToggleGroup(tg);
+		rbs[6].setToggleGroup(tg);
 		
 		radio_button actionhandler = new radio_button();
 		rbs[0].addEventHandler(ActionEvent.ANY, actionhandler);
@@ -129,6 +128,8 @@ public class reports extends Application
 		rbs[2].addEventHandler(ActionEvent.ANY, actionhandler);
 		rbs[3].addEventHandler(ActionEvent.ANY, actionhandler);
 		rbs[4].addEventHandler(ActionEvent.ANY, actionhandler);
+		rbs[5].addEventHandler(ActionEvent.ANY, actionhandler);
+		rbs[6].addEventHandler(ActionEvent.ANY, actionhandler);
 		
 		cv = new Canvas(600,30);
 		clr = Color.BLACK;
@@ -165,10 +166,10 @@ public class reports extends Application
 		lb_top_right_q.setFont(new Font(25));
 		
 		lb_top_left.setPrefSize(70, 0);
-		lb_top_left_ans.setPrefSize(80, 80);
+		lb_top_left_ans.setPrefSize(70, 80);
 		lb_top_left_q.setPrefSize(170, 80);
 		lb_top_right.setPrefSize(70, 0);
-		lb_top_right_rem.setPrefSize(80, 80);
+		lb_top_right_rem.setPrefSize(70, 80);
 		lb_top_right_q.setPrefSize(30, 80);
 		
 		HBox hb_top = new HBox();
@@ -330,18 +331,6 @@ public class reports extends Application
 	/******************************isnumber end******************************/
 	
 	
-	/******************************isnumber******************************/
-	public void isLength(String s)
-	{
-		try{
-			Integer.parseInt(s);
-		}catch (Exception e){
-			instr = "100";
-		}
-	}
-	/******************************isnumber end******************************/
-	
-	
 	/******************************canvas******************************/
 	private void drawCanvas(){
 		
@@ -356,7 +345,7 @@ public class reports extends Application
 		}
 		else if(judgment == "incorrect"){
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
-			gc.fillText("(´・ω・｀) 不正解 (´・ω・｀)", 93, 25);		//不正解
+			gc.fillText("(´・ω・｀) 不正解 (´・ω・｀)", 100, 25);		//不正解
 		}
 		else if(judgment == "fraud"){
 			gc.clearRect(0,0, cv.getWidth(), cv.getHeight());
@@ -382,11 +371,13 @@ public class reports extends Application
 		{
 			RadioButton target = (RadioButton)e.getTarget();
 			String id = target.getId();
+			if(id.equals("white")) clr = Color.WHITE;
+			if(id.equals("black")) clr = Color.BLACK;
 			if(id.equals("red")) clr = Color.RED;
 			if(id.equals("orange")) clr = Color.ORANGE;
 			if(id.equals("blue")) clr = Color.BLUE;
 			if(id.equals("yellow")) clr = Color.YELLOW;
-			if(id.equals("green")) clr = Color.MEDIUMSPRINGGREEN;
+			if(id.equals("green")) clr = Color.GREENYELLOW;
 			drawCanvas();
 		}
 	}
@@ -460,9 +451,9 @@ public class reports extends Application
 				text.setText(instr);
 			}else if((instr.length() == 0) && bt.getId().equals("13")){
 				instr += "-";
+			}else{
+				isNumber(instr);
 			}
-			
-			isNumber(instr);
 			
 			if(flags){
 				
@@ -471,8 +462,6 @@ public class reports extends Application
 				if(bt.getId().equals("10")){
 					
 					sum_count++;
-					
-					isLength(instr);
 					
 					num = Integer.parseInt(instr);
 					
@@ -492,6 +481,8 @@ public class reports extends Application
 					lb_top_left_ans.setText(count + " / " + sum_count);
 				}
 			}else{
+				instr = "";
+				text.setText(instr);
 				judgment = "fraud";
 				drawCanvas();
 			}
@@ -508,7 +499,8 @@ public class reports extends Application
 		{
 			
 			calculation();
-			lb_top_left_ans.setText(count + " / " + sum_count);
+			lb_problem.setTextFill(Color.BLACK);
+			lb_top_left_ans.setText(count + "  / " + sum_count);
 			
 			instr = "";
 			text.setText(instr);
@@ -542,6 +534,7 @@ public class reports extends Application
 						
 						sum = count;
 						lb_problem.setText(sum +  " 問 正解！");
+						lb_problem.setTextFill(Color.BLUE);
 						btn_right_top.setDisable(true);
 						btn_right_bottom.setDisable(true);
 						
@@ -554,10 +547,11 @@ public class reports extends Application
 						
 						time = 0;
 						count = 0; sum_count = 0;
+						
 						menu.setDisable(false);
 						btn_left.setDisable(false);
-						lb_top_right_rem.setText("30");
 						mi1.setSelected(true);
+						lb_top_right_rem.setText("30");
 						judgment = "fraud";
 						drawCanvas();
 					}
